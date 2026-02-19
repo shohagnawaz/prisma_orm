@@ -17,15 +17,16 @@ model User {
   id Int @id @default(autoincrement())
   name String 
   email String @unique
+  role ROLE @default(USER)
   posts Post[]
-  profiles Profile[]
+  profile Profile?
 }
 
 model Profile {
   id Int @id @default(autoincrement())
   bio String
-  dateOfBirth DateTime
-  userId Int 
+  dateOfBirth DateTime?
+  userId Int @unique 
   user User @relation(fields: [userId], references: [id])
 }
 
@@ -35,8 +36,13 @@ model Post {
   content String
   isPublished Boolean @default(false)
   createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
   authorId Int
   author User @relation(fields: [authorId], references: [id])
+}
+
+enum ROLE {
+  USER
+  ADMIN
 }
